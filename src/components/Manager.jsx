@@ -73,16 +73,34 @@ const Manager = () => {
 
     // console.log(passwordArray) we can't see the updated passwordArray here because it is asynchronous
     console.log([...passwordArray, form]);
+    toast(
+      "Password saved successfully",
+      {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: "Bounce",
+      }
+    );
   };
 
   const DeletePassword = (id) => {
     
     let c = confirm("Are you sure you want to delete the password ?");
     if (c){
+      toast("Password deleted successfully");
       console.log("Deleting the password with id ", id);
     setpasswordArray(passwordArray.filter(item => item.id !== id)); 
     localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item => item.id !== id)));
     }
+
+    
+
     // console.log(form);
     // setpasswordArray([...passwordArray, {...form, id:uuidv4()}]);
     // localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
@@ -90,6 +108,10 @@ const Manager = () => {
     // console.log([...passwordArray, form]);
   };
   const editPassword = (id) => {
+    
+    
+    
+    
     console.log("Editing the password with id ", id);
     setform(passwordArray.filter(item => item.id === id)[0]);
     setpasswordArray(passwordArray.filter(item => item.id !== id));
@@ -105,7 +127,7 @@ const Manager = () => {
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -114,14 +136,14 @@ const Manager = () => {
         draggable
         pauseOnHover
         theme="light"
-        transition="Bounce"
+        // transition="Bounce"
       />
       {/* Same as */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
 
       <div className="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
 
-      <div className="container mx-auto text-black  max-w-4xl">
+      <div className="md:container md:px-0 p-2 mx-auto text-black  max-w-4xl">
         <h1 className="text-4xl text-center p-2 font-bold">JK's Pass</h1>
         <p className=" text-center text-slate-400 ">
           manage all the passwords here
