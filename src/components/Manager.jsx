@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -67,39 +67,39 @@ const Manager = () => {
       return;
     }
     console.log(form);
-    setpasswordArray([...passwordArray, {...form, id:uuidv4()}]);
-    localStorage.setItem("passwords", JSON.stringify([...passwordArray, {...form, id:uuidv4()}]));
-    setform({site: "", username: "" , password: ""});
+    setpasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
+    localStorage.setItem(
+      "passwords",
+      JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
+    );
+    setform({ site: "", username: "", password: "" });
 
     // console.log(passwordArray) we can't see the updated passwordArray here because it is asynchronous
     console.log([...passwordArray, form]);
-    toast(
-      "Password saved successfully",
-      {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        // transition: "Bounce",
-      }
-    );
+    toast("Password saved successfully", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      // transition: "Bounce",
+    });
   };
 
   const DeletePassword = (id) => {
-    
     let c = confirm("Are you sure you want to delete the password ?");
-    if (c){
+    if (c) {
       toast("Password deleted successfully");
       console.log("Deleting the password with id ", id);
-    setpasswordArray(passwordArray.filter(item => item.id !== id)); 
-    localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item => item.id !== id)));
+      setpasswordArray(passwordArray.filter((item) => item.id !== id));
+      localStorage.setItem(
+        "passwords",
+        JSON.stringify(passwordArray.filter((item) => item.id !== id))
+      );
     }
-
-    
 
     // console.log(form);
     // setpasswordArray([...passwordArray, {...form, id:uuidv4()}]);
@@ -108,17 +108,10 @@ const Manager = () => {
     // console.log([...passwordArray, form]);
   };
   const editPassword = (id) => {
-    
-    
-    
-    
     console.log("Editing the password with id ", id);
-    setform(passwordArray.filter(item => item.id === id)[0]);
-    setpasswordArray(passwordArray.filter(item => item.id !== id));
-
-  }
-
-  
+    setform(passwordArray.filter((item) => item.id === id)[0]);
+    setpasswordArray(passwordArray.filter((item) => item.id !== id));
+  };
 
   const HandleChange = (e) => {
     setform({ ...form, [e.target.name]: e.target.value });
@@ -141,25 +134,27 @@ const Manager = () => {
       {/* Same as */}
       {/* <ToastContainer /> */}
 
-      <div className="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
+      <div className="fixed -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
 
-      <div className="md:container md:px-0 p-2 mx-auto text-black  max-w-4xl">
+      <div className="md:container md:px-0 p-2 mx-auto  text-black  max-w-4xl">
         <h1 className="text-4xl text-center p-2 font-bold">JK's Pass</h1>
         <p className=" text-center text-slate-400 ">
           manage all the passwords here
         </p>
-        <div className=" flex items-center flex-col p-4 gap-4  ">
-          <input
-            value={form.site}
-            onChange={HandleChange}
-            placeholder="Enter website url"
-            className=" border border-green-500 w-full rounded-full py-1 px-4 "
-            type="text"
-            name="site"
-            id=""
-          />
+        <div className=" md:flex-row items-center h-full flex-col p-8 gap-10  ">
+          <div className="w-full md:w-[50%] mx-auto justify-between flex gap-8 my-4">
+            <input
+              value={form.site}
+              onChange={HandleChange}
+              placeholder="Enter website url"
+              className=" border border-green-500 w-full rounded-full py-1 px-4 "
+              type="text"
+              name="site"
+              id="site"
+            />
+          </div>
 
-          <div className=" w-full justify-between flex gap-8">
+          <div className=" w-full md:w-[50%] mx-auto justify-between flex gap-8 my-4">
             <input
               value={form.username}
               onChange={HandleChange}
@@ -167,8 +162,11 @@ const Manager = () => {
               placeholder="Enter usename"
               className=" border border-green-500 w-full rounded-full py-1 px-4"
               type="text"
+              id="username"
             />
-            <div className="relative ">
+            
+          </div>
+          <div className="relative my-4 md:w-[50%] mx-auto ">
               <input
                 value={form.password}
                 name="password"
@@ -177,6 +175,7 @@ const Manager = () => {
                 className="border-green-500 border w-full rounded-full py-1 px-6"
                 type="password"
                 ref={passwordRef}
+                id="password"
               />
 
               <span
@@ -186,10 +185,9 @@ const Manager = () => {
                 <img ref={ref} width={24} src="icons/eye.svg" alt="" />
               </span>
             </div>
-          </div>
           <button
             onClick={SavePassword}
-            className="flex justify-center items-center gap-1 bg-green-500 rounded-full w-fit px-3 py-1 hover:bg-green-400 "
+            className="flex justify-center items-center gap-1 mx-auto bg-green-500 rounded-full w-fit px-3 py-1 hover:bg-green-400 "
           >
             <lord-icon
               src="https://cdn.lordicon.com/jgnvfzqg.json"
@@ -200,11 +198,11 @@ const Manager = () => {
         </div>
 
         <div className="passwords">
-          <h2 className="font-bold text-2xl py-3">Your passwords</h2>
+          <h2 className="font-bold text-center text-2xl py-3">Your passwords</h2>
           {passwordArray.length === 0 && <div>No passwords saved</div>}
           {/* table */}
           {passwordArray.length != 0 && (
-            <table className=" w-full table-auto overflow-hidden rounded-md">
+            <table className=" w-[60%] mx-auto mb-10   table-auto overflow-hidden rounded-md">
               <thead className="bg-purple-600">
                 <tr>
                   <th className="py-2">Site</th>
@@ -257,22 +255,39 @@ const Manager = () => {
                         </div>
                       </td>
                       <td className=" py-2 border border-blue-300 text-center min-w-12">
-                        <span className="cursor-pointer mx-1" onClick={() => {editPassword(item.id)}} >
+                        <span
+                          className="cursor-pointer mx-1"
+                          onClick={() => {
+                            editPassword(item.id);
+                          }}
+                        >
                           <lord-icon
                             src="https://cdn.lordicon.com/exymduqj.json"
                             trigger="hover"
-                            style={{width:"30px",height:"30px",cursor:"pointer"}}
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              cursor: "pointer",
+                            }}
                           ></lord-icon>
                         </span>
-                        <span className="cursor-pointer mx-1" onClick={() => {DeletePassword(item.id)}}>
+                        <span
+                          className="cursor-pointer mx-1"
+                          onClick={() => {
+                            DeletePassword(item.id);
+                          }}
+                        >
                           <lord-icon
                             src="https://cdn.lordicon.com/hwjcdycb.json"
                             trigger="hover"
-                            style={{width:"30px",height:"30px",cursor:"pointer"}}
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              cursor: "pointer",
+                            }}
                           ></lord-icon>
                         </span>
                       </td>
-                      
                     </tr>
                   );
                 })}
