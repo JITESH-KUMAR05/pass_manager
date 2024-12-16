@@ -11,12 +11,20 @@ const Manager = () => {
   const [form, setform] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setpasswordArray] = useState([]);
 
-  useEffect(() => {
-    let passwords = localStorage.getItem("passwords");
+  const getPasswords = async () => {
+    let req = await fetch("http://localhost:3000/")
+    let passwords = await req.json();
     // let passwordArray ;
-    if (passwords) {
-      setpasswordArray(JSON.parse(passwords));
-    }
+    console.log(passwords);
+      setpasswordArray(passwords);  
+      
+    
+  }
+
+  useEffect(() => {
+    getPasswords();
+    
+    
     // else{
     //     passwordArray = [];
     // }
@@ -60,18 +68,26 @@ const Manager = () => {
     }
   };
 
-  const SavePassword = () => {
+  const SavePassword = async() => {
     // check if the form is empty
     if (form.site === "" || form.username === "" || form.password === "") {
       toast.error("Please fill all the fields");
       return;
     }
+    await fetch("http://localhost:3000/", {
+      method: "DELETE",headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({id : form.id})
+    });
     console.log(form);
     setpasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
-    localStorage.setItem(
-      "passwords",
-      JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
-    );
+    let res = await fetch("http://localhost:3000/", {
+      method: "POST",headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({...form, id: uuidv4()})
+    });
+    // localStorage.setItem(
+    //   "passwords",
+    //   JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
+    // );
     setform({ site: "", username: "", password: "" });
 
     // console.log(passwordArray) we can't see the updated passwordArray here because it is asynchronous
@@ -89,16 +105,20 @@ const Manager = () => {
     });
   };
 
-  const DeletePassword = (id) => {
+  const DeletePassword = async(id) => {
     let c = confirm("Are you sure you want to delete the password ?");
     if (c) {
       toast("Password deleted successfully");
       console.log("Deleting the password with id ", id);
       setpasswordArray(passwordArray.filter((item) => item.id !== id));
-      localStorage.setItem(
-        "passwords",
-        JSON.stringify(passwordArray.filter((item) => item.id !== id))
-      );
+      // localStorage.setItem(
+      //   "passwords",
+      //   JSON.stringify(passwordArray.filter((item) => item.id !== id))
+      // );
+      let res = await fetch("http://localhost:3000/", {
+        method: "DELETE",headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({id})
+      });
     }
 
     // console.log(form);
@@ -109,8 +129,9 @@ const Manager = () => {
   };
   const editPassword = (id) => {
     console.log("Editing the password with id ", id);
-    setform(passwordArray.filter((item) => item.id === id)[0]);
+    setform({...passwordArray.filter((item) => item.id === id)[0], id : id});
     setpasswordArray(passwordArray.filter((item) => item.id !== id));
+
   };
 
   const HandleChange = (e) => {
@@ -245,7 +266,7 @@ const Manager = () => {
                       </td>
                       <td className=" py-2 border border-blue-300 text-center min-w-32">
                         <div className="flex justify-center gap-4 items-center">
-                          <span>{item.password}</span>
+                          <span>{"*".repeat(item.password.length)}</span>
                           <button
                             onClick={copyText(item.password)}
                             className="border border-blue-400 p-2 text-sm rounded-full bg-blue-900 text-white "
