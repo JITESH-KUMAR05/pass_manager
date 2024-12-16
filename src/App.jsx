@@ -7,11 +7,13 @@ import Footer from "./components/Footer";
 function App() {
   return (
     <>
-      <Navbar></Navbar>
-      <div className="min-h-[81.5vh]">
-        <Manager />
+      <div className="w-100vw h-100vh">
+        <Navbar></Navbar>
+        <div className=" -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)] min-h-[81.5vh]">
+          <Manager />
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 }
